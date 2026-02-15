@@ -154,3 +154,27 @@ add_action('widgets_init', function () {
         'id' => 'sidebar-footer',
     ] + $config);
 });
+
+/**
+ * Add Google Analytics.
+ */
+add_action('wp_head', function () {
+    $ga_id = env('GOOGLE_ANALYTICS_ID');
+
+    if (! $ga_id || current_user_can('manage_options')) {
+        return;
+    }
+?>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr($ga_id); ?>"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', '<?php echo esc_attr($ga_id); ?>');
+    </script>
+<?php
+}, 20);
