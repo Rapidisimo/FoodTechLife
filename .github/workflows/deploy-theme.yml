@@ -1,0 +1,62 @@
+name: Deploy Sage Theme
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # Matches your DreamHost version
+          tools: composer
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies (PHP)
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Install Dependencies (JS) & Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare Deploy Artifact
+        run: |
+          mkdir deploy_package
+          rsync -rr . deploy_package/ \
+            --exclude=.git \
+            --exclude=.github \
+            --exclude=node_modules \
+            --exclude=deploy_package
+
+      - name: Sync to DreamHost
+        uses: easingthemes/ssh-deploy@v5.0.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: '-rltgoDzvO --delete'
+          SOURCE: 'deploy_package/'
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          # TARGET: The exact path to your THEME folder
+          TARGET: '/home/${{ secrets.REMOTE_USER }}/foodtechlife.com/wp-content/themes/foodtechlife/'
+
+      - name: Clear Cache on Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/${{ secrets.REMOTE_USER }}/foodtechlife.com/wp-content/themes/foodtechlife
+            wp acorn optimize:clear
+            wp acorn optimize
