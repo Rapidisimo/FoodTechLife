@@ -1,0 +1,14 @@
+@import "tailwindcss" theme(static);
+
+@theme {
+    --font-base: "Nunito", sans-serif;
+    --font-heading: "Lora", serif;
+}
+
+
+@source "../views/";
+@source "../../app/";
+@import "./reset.css";
+@import "./fonts.css";
+@import "./global.css";
+@import "./utilities.css";
