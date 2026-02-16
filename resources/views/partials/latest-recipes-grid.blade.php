@@ -42,7 +42,6 @@ $recipe_archive_url = get_post_type_archive_link('recipe');
     <div class="flex justify-end">
         <a href="{{ $recipe_archive_url }}">
             View All Recipes
-            <x-heroicon-c-arrow-right-circle class="w-5 h-5 inline-block" />
         </a>
     </div>
 </section>

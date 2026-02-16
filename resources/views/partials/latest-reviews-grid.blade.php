@@ -27,7 +27,6 @@ $review_archive_url = get_post_type_archive_link('review');
     <div class="flex justify-end">
         <a href="{{ $review_archive_url }}">
             View All Reviews
-            <x-heroicon-c-arrow-right-circle class="w-5 h-5 inline-block" />
         </a>
     </div>
 </section>

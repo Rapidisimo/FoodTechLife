@@ -24,12 +24,10 @@ $recent_recipes = new WP_Query([
             <div class="links grid flow">
                 <a href="{{ the_permalink() }}"=>
                     Continue to Recipe
-                    <x-heroicon-c-arrow-right-circle class="w-5 h-5 inline-block" />
                 </a>
                 @if(get_field('youtube_link'))
                 <a href="{{get_field('youtube_link')}}" target="_blank">
                     View on YouTube
-                    <x-heroicon-c-arrow-top-right-on-square class="w-5 h-5 inline-block align-text-top" />
                 </a>
                 @endif
             </div>
