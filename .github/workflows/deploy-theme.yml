@@ -44,7 +44,7 @@ jobs:
         uses: easingthemes/ssh-deploy@v5.0.0
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: '-rltgoDzvO --delete --ignore-times' # Added --ignore-times
+          ARGS: '-rltgoDzvO --delete --ignore-times --exclude=.env'
           SOURCE: 'deploy_package/'
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
