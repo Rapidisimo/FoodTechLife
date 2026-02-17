@@ -9,6 +9,15 @@ namespace App;
 use Illuminate\Support\Facades\Vite;
 
 /**
+ * FIX: Force load the .env file from the theme directory.
+ * Standard WordPress doesn't do this automatically.
+ */
+if (file_exists(get_theme_file_path('/.env'))) {
+    $dotenv = \Dotenv\Dotenv::createImmutable(get_theme_file_path());
+    $dotenv->safeLoad();
+}
+
+/**
  * Inject styles into the block editor.
  *
  * @return array
